@@ -1,5 +1,5 @@
 # ---
-# repo: ddsjoberg/standalone
+# repo: insightsengineering/standalone
 # file: standalone-checks.R
 # last-updated: 2024-05-04
 # license: https://unlicense.org
