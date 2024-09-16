@@ -1,5 +1,5 @@
 # ---
-# repo: ddsjoberg/standalone
+# repo: insightsengineering/standalone
 # file: standalone-check_pkg_installed.R
 # last-updated: 2024-04-19
 # license: https://unlicense.org
