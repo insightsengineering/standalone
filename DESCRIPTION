@@ -1,10 +1,10 @@
 Package: standalone
-Title: What the Package Does (One Line, Title Case)
+Title: Package Housing Helper Functions
 Version: 0.0.0.9000
 Authors@R: 
     person("Daniel D.", "Sjoberg", , "danield.sjoberg@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-0862-2018"))
-Description: What the package does (one paragraph).
+Description: Standalone shims for functions from packages such as {cli}, {forcats}, {stringr}, etc.
 License: MIT + file LICENSE
 URL: http://www.danieldsjoberg.com/standalone/
 Depends: 
@@ -15,10 +15,14 @@ Imports:
     rlang,
     tidyr
 Suggests:
+    spelling (>= 2.2.0),
     testthat (>= 3.2.0),
     usethis,
     forcats,
     stringr
+Config/Needs/check: hms
+Config/Needs/website: rmarkdown,
+    insightsengineering/nesttemplate
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Encoding: UTF-8
