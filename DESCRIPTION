@@ -15,6 +15,7 @@ Imports:
     rlang,
     tidyr
 Suggests:
+    spelling (>= 2.2.0),
     testthat (>= 3.2.0),
     usethis,
     forcats,
