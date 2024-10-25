@@ -1,5 +1,5 @@
 ---
-url: http://www.danieldsjoberg.com/standalone/
+url: https://insightsengineering.github.io/standalone/
 
 template:
   package: nesttemplate
@@ -10,7 +10,7 @@ navbar:
     right: [search, github]
     github:
       icon: fa-github
-      href: http://www.danieldsjoberg.com/standalone/
+      href: https://github.com/insightsengineering/standalone
 
 # development:
 #   mode: auto
