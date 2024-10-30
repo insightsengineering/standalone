@@ -103,19 +103,25 @@ str_sub_all <- function(string, start = 1L, end = -1L) {
   lapply(string, function(x) substr(x, start = start, stop = end))
 }
 
-str_pad <- function(string, width, side = c("left", "right", "both"), pad = " ", use_width = TRUE) {
-  side <- match.arg(side, c("left", "right", "both"))
+str_pad <- function(string, width, side = c("left", "right", "both"), pad = " ") {
+  side <- match.arg(side)
+
+  current_length <- nchar(string)
+
+  if (current_length >= width) {
+    return(string)
+  }
+
+  pad_length <- width - current_length
 
   if (side == "both") {
-    pad_left <- (width - nchar(string)) %/% 2
-    pad_right <- width - nchar(string) - pad_left
+    pad_left <- pad_length %/% 2
+    pad_right <- pad_length - pad_left
     padded_string <- paste0(strrep(pad, pad_left), string, strrep(pad, pad_right))
-  } else {
-    format_string <- ifelse(side == "right", paste0("%-", width, "s"),
-                            ifelse(side == "left", paste0("%", width, "s"),
-                                   paste0("%", width, "s")))
-
-    padded_string <- sprintf(format_string, string)
+  } else if (side == "right") {
+    padded_string <- paste0(string, strrep(pad, pad_length))
+  } else { # side == "left"
+    padded_string <- paste0(strrep(pad, pad_length), string)
   }
 
   return(padded_string)
