@@ -106,31 +106,25 @@ str_sub_all <- function(string, start = 1L, end = -1L) {
 str_pad <- function(string, width, side = c("left", "right", "both"), pad = " ", use_width = TRUE) {
   side <- match.arg(side)
 
-  # Calculate current lengths of strings
-  current_length <- nchar(string)
+  # allow vectorized input
+  padded_strings <- sapply(string, function(s) {
+    current_length <- nchar(s)
+    pad_length <- width - current_length
 
-  # Initialize the result vector
-  padded_string <- character(length(string))
-
-  for (i in seq_along(string)) {
-    if (current_length[i] >= width[i]) {
-      padded_string[i] <- string[i]
-    } else {
-      pad_length <- width[i] - current_length[i]
-
-      if (side == "both") {
-        pad_left <- pad_length %/% 2
-        pad_right <- pad_length - pad_left
-        padded_string[i] <- paste0(strrep(pad, pad_left), string[i], strrep(pad, pad_right))
-      } else if (side == "right") {
-        padded_string[i] <- paste0(string[i], strrep(pad, pad_length))
-      } else { # side == "left"
-        padded_string[i] <- paste0(strrep(pad, pad_length), string[i])
-      }
+    if (side == "both") {
+      pad_left <- pad_length %/% 2
+      pad_right <- pad_length - pad_left
+      padded_string <- paste0(strrep(pad, pad_left), s, strrep(pad, pad_right))
+    } else if (side == "right") {
+      padded_string <- paste0(s, strrep(pad, pad_length))
+    } else { # side == "left"
+      padded_string <- paste0(strrep(pad, pad_length), s)
     }
-  }
 
-  return(padded_string)
+    return(padded_string)
+  })
+
+  return(unname(padded_strings))
 }
 
 str_split <- function(string, pattern, n = Inf, fixed = FALSE, perl = !fixed) {
