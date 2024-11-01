@@ -1,5 +1,5 @@
 **What changes are proposed in this pull request?**
-* Style this entry in a way that can be copied directly into `NEWS.md`. (#<issue number>, @<username>)
+(#<issue number>, @<username>)
 
 Provide more detail here as needed.
 
@@ -24,7 +24,6 @@ Reviewer Checklist (if item does not apply, mark is as complete)
 - [ ] Code coverage is suitable for any new functions/features: `devtools::test_coverage()`
 
 When the branch is ready to be merged:
-- [ ] Update `NEWS.md` with the changes from this pull request under the heading "`# cards (development version)`". If there is an issue associated with the pull request, reference it in parentheses at the end update (see `NEWS.md` for examples).
 - [ ] **All** GitHub Action workflows pass with a :white_check_mark:
 - [ ] Approve Pull Request
 - [ ] Merge the PR. Please use "Squash and merge" or "Rebase and merge".
