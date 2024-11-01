@@ -226,14 +226,23 @@ test_that("str_sub_all() works", {
 })
 
 test_that("str_pad() works", {
-  s <-  str_pad("hadley", 30, "left")
+  s <- str_pad("hadley", 30, "left")
   expect_identical(s, stringr::str_pad("hadley", 30, "left"))
 
   s <- str_pad("hadley", 30, "right")
-  expect_identical(s, stringr::str_pad("hadley", 30, "right"),)
+  expect_identical(s, stringr::str_pad("hadley", 30, "right"), )
 
   s <- str_pad("hadley", 30, "both")
   expect_identical(s, stringr::str_pad("hadley", 30, "both"))
+})
+
+test_that("str_pad() matches stringr::str_pad with escape characters", {
+  s <- "\"**Primary System Organ Class**  \\n    **Reported Term for the Adverse Event**\""
+
+  padded_string <- str_pad(s, 82, pad = " ", side = "right")
+  stringr_string <- stringr::str_pad(s, 82, pad = " ", side = "right")
+
+  expect_identical(padded_string, stringr_string)
 })
 
 test_that("word() works", {
