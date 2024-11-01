@@ -11,6 +11,7 @@
 # of programming.
 #
 # ## Changelog
+# 2024-11-1 - `str_pad()` was updated to use `strrep()` instead of `sprintf()` (accommodates escape characters).
 #
 # nocov start
 # styler: off
