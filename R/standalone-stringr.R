@@ -1,7 +1,7 @@
 # ---
 # repo: insightsengineering/standalone
 # file: standalone-stringr.R
-# last-updated: 2024-11-01
+# last-updated: 2025-01-31
 # license: https://unlicense.org
 # imports: rlang
 # ---
@@ -13,6 +13,8 @@
 # ## Changelog
 # 2024-11-01
 #   - `str_pad()` was updated to use `strrep()` instead of `sprintf()` (accommodates escape characters).
+# 2025-01-25
+#   - `str_extract()` was updated to use `grepl()` instead of `str_detect()` (removes {stringr} dependency).
 #
 # nocov start
 # styler: off
@@ -38,7 +40,7 @@ str_remove_all <- function(string, pattern, fixed = FALSE, perl = !fixed) {
 
 str_extract <- function(string, pattern, fixed = FALSE, perl = !fixed) {
   res <- rep(NA_character_, length.out = length(string))
-  res[str_detect(string, pattern, fixed = fixed)] <-
+  res[grepl(pattern = pattern, x = string, fixed = fixed, perl = perl)] <-
     regmatches(x = string, m = regexpr(pattern = pattern, text = string, fixed = fixed, perl = perl))
 
   res
