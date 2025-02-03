@@ -1,7 +1,7 @@
 # ---
 # repo: insightsengineering/standalone
 # file: standalone-check_pkg_installed.R
-# last-updated: 2024-04-19
+# last-updated: 2025-02-03
 # license: https://unlicense.org
 # dependencies: standalone-cli_call_env.R
 # imports: [rlang, dplyr, tidyr]
@@ -10,6 +10,9 @@
 # This file provides functions to check package installation.
 #
 # ## Changelog
+# 2025-02-03
+#   - `get_pkg_dependencies()` was updated to use base r equivalents for `str_extract()` and `str_remove_all()`.
+
 # nocov start
 # styler: off
 
@@ -160,8 +163,10 @@ get_pkg_dependencies <- function(pkg = utils::packageName(), lib.loc = NULL) {
       sep = " ", extra = "merge", fill = "right"
     ) |>
     dplyr::mutate(
-      compare = .data$version |> str_extract(pattern = "[>=<]+"),
-      version = .data$version |> str_remove_all(pattern = "[\\(\\) >=<]")
+      compare = ifelse(regexpr("[>=<]+", .data$version) > 0,
+                       regmatches(.data$version, regexpr("[>=<]+", .data$version)),
+                       NA),
+      version = gsub(pattern = "[\\(\\) >=<]", replacement = "", x = .data$version)
     )
 }
 
