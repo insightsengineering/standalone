@@ -163,9 +163,9 @@ get_pkg_dependencies <- function(pkg = utils::packageName(), lib.loc = NULL) {
       sep = " ", extra = "merge", fill = "right"
     ) |>
     dplyr::mutate(
-      compare = ifelse(regexpr("[>=<]+", .data$version) > 0,
+      compare = as.character(ifelse(regexpr("[>=<]+", .data$version) > 0,
                        regmatches(.data$version, regexpr("[>=<]+", .data$version)),
-                       NA),
+                       NA)),
       version = gsub(pattern = "[\\(\\) >=<]", replacement = "", x = .data$version)
     )
 }
