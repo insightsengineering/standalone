@@ -270,3 +270,16 @@ test_that("str_split() works", {
   s <- str_split("This is a test string\nwith multiple\nlines", pattern = "\\n(?!\\\\)")
   expect_identical(s, stringr::str_split("This is a test string\nwith multiple\nlines", pattern = "\\n(?!\\\\)"))
 })
+
+test_that("str_extract() and str_remove_all() replacement works for package version identification", {
+  package_version <- "2.0.3"
+
+  s <- as.character(ifelse(regexpr("[>=<]+", package_version) > 0,
+              regmatches(package_version, regexpr("[>=<]+", package_version)),
+              NA))
+  expect_identical(s, stringr::str_extract(package_version, pattern = "[>=<]+"))
+
+  s <- gsub(pattern = "[\\(\\) >=<]", replacement = "", x = package_version)
+  expect_identical(s, stringr::str_remove_all(package_version, "[\\(\\) >=<]"))
+
+})
