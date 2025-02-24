@@ -46,6 +46,9 @@ test_that("fct_relevel() works", {
   f <- factor(c("b", "b", "a", "c", "c", "c"))
   expect_equal(forcats::fct_relevel(fct_relevel(f, "b", "a")), fct_relevel(f, "b", "a"))
   expect_equal(forcats::fct_relevel(f, "a", after = Inf), fct_relevel(f, "a", after = Inf))
-  expect_equal(forcats::fct_relevel(f, rev), fct_relevel(f, rev)
-)
+  expect_equal(forcats::fct_relevel(f, rev), fct_relevel(f, rev))
+
+  # test for unobserved levels
+  f_new <- fct_relevel(f, "b", "a", "d")  # "d" is unobserved
+  expect_equal(levels(f_new), c("b", "a", "d", "c"))  # "d" should be added as a level, even though not observed
 })

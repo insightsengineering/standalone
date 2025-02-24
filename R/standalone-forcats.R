@@ -77,13 +77,6 @@ fct_relevel <- function(f, ..., after = 0L) {
     rlang::chr(...)
   }
 
-  # Check and warn for unknown levels
-  unknown <- setdiff(first_levels, old_levels)
-  if (length(unknown) > 0) {
-    cli::cli_warn("{length(unknown)} unknown level{?s} in `f`: {unknown}")
-    first_levels <- intersect(first_levels, old_levels)
-  }
-
   # Reorder levels
   new_levels <- append(setdiff(old_levels, first_levels), first_levels, after = after)
   new_factor <- factor(f, levels = new_levels)
