@@ -41,3 +41,14 @@ test_that("fct_na_value_to_level() works", {
   forcats::fct_na_value_to_level(f2, "(Missing)")
   fct_na_value_to_level(f2, "(Missing)")
 })
+
+test_that("fct_relevel() works", {
+  f <- factor(c("b", "b", "a", "c", "c", "c"))
+  expect_equal(forcats::fct_relevel(fct_relevel(f, "b", "a")), fct_relevel(f, "b", "a"))
+  expect_equal(forcats::fct_relevel(f, "a", after = Inf), fct_relevel(f, "a", after = Inf))
+  expect_equal(forcats::fct_relevel(f, rev), fct_relevel(f, rev)
+)
+
+
+
+})
