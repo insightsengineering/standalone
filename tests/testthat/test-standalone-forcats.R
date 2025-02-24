@@ -48,7 +48,4 @@ test_that("fct_relevel() works", {
   expect_equal(forcats::fct_relevel(f, "a", after = Inf), fct_relevel(f, "a", after = Inf))
   expect_equal(forcats::fct_relevel(f, rev), fct_relevel(f, rev)
 )
-
-
-
 })
