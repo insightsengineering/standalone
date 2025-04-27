@@ -6,7 +6,7 @@
 \alias{standalone-package}
 \title{standalone: Package Housing Helper Functions}
 \description{
-Standalone shims for functions from packages such as {cli}, {forcats}, {stringr}, etc.
+Standalone shims for functions from packages such as 'forcats', 'stringr', etc.
 }
 \seealso{
 Useful links:
