@@ -48,6 +48,7 @@ test_that("fct_relevel() works", {
   expect_equal(forcats::fct_relevel(f, "a", after = Inf), fct_relevel(f, "a", after = Inf))
   expect_equal(forcats::fct_relevel(f, rev), fct_relevel(f, rev))
   expect_equal(forcats::fct_relevel(f, ~rev(.x)), fct_relevel(f, ~rev(.x)))
+  expect_equal(forcats::fct_relevel(letters, "z"), fct_relevel(letters, "z"))
 
   # test for unobserved levels
   f_new <- fct_relevel(f, "b", "a", "d")  # "d" is unobserved
