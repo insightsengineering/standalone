@@ -54,3 +54,20 @@ test_that("fct_relevel() works", {
   f_new <- fct_relevel(f, "b", "a", "d")  # "d" is unobserved
   expect_equal(levels(f_new), c("b", "a", "d", "c"))  # "d" should be added as a level, even though not observed
 })
+
+test_that("fct_* function behaviour when input is not a factor ", {
+  f <- factor(c("b", "b", "a", "c", "c", "c"))
+  c <- as.character(c("b", "b", "a", "c", "c", "c"))
+  expect_equal(fct_infreq(f), fct_infreq(c))
+  expect_equal(fct_inorder(f), fct_inorder(c))
+  expect_equal(fct_rev(f), fct_rev(c))
+  expect_equal(fct_relevel(fct_relevel(f, "b", "a")), fct_relevel(fct_relevel(c, "b", "a")))
+
+  f <- factor(sample(letters[1:3], 20, replace = TRUE))
+  c <- as.character(f)
+  expect_equal(fct_expand(f, letters[1:6]), fct_expand(c, letters[1:6]))
+
+  f <- as.factor(c("a", "b", NA, "c", "b", NA))
+  c <- as.character(f)
+  expect_equal(fct_na_value_to_level(f, level = NA), fct_na_value_to_level(c, level = NA))
+})
