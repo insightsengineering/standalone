@@ -61,7 +61,7 @@ test_that("fct_* function behaviour when input is not a factor ", {
   expect_equal(forcats::fct_infreq(f), fct_infreq(c))
   expect_equal(forcats::fct_inorder(f), fct_inorder(c))
   expect_equal(forcats::fct_rev(f), fct_rev(c))
-  expect_equal(forcats::fct_relevel(fct_relevel(f, "b", "a")), fct_relevel(fct_relevel(c, "b", "a")))
+  expect_equal(forcats::fct_relevel(forcats::fct_relevel(f, "b", "a")), fct_relevel(fct_relevel(c, "b", "a")))
 
   f <- factor(sample(letters[1:3], 20, replace = TRUE))
   c <- as.character(f)
