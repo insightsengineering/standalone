@@ -143,3 +143,11 @@
       Error in `myfunc()`:
       ! The `x` argument must be numeric.
 
+---
+
+    Code
+      check_identical_length(letters[1], letters)
+    Condition
+      Error in `check_identical_length()`:
+      ! Arguments `letters[1]` and `letters` must be the same length.
+

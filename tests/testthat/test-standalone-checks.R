@@ -245,4 +245,8 @@ test_that("check functions work", {
   expect_silent(myfunc(c(1, 2.45, 6L, TRUE)))
   expect_silent(myfunc(0L))
   expect_snapshot(myfunc("a"), error = TRUE)
+
+  # check_identical_length
+  expect_silent(check_identical_length(letters, letters))
+  expect_snapshot(check_identical_length(letters[1], letters), error = TRUE)
 })
