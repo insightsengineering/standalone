@@ -1,7 +1,7 @@
 # ---
 # repo: insightsengineering/standalone
 # file: standalone-forcats.R
-# last-updated: 2025-05-03
+# last-updated: 2025-06-24
 # license: https://unlicense.org
 # imports:
 # ---
@@ -11,6 +11,8 @@
 # of programming.
 #
 # ## Changelog
+# 2025-06-24
+#   - add `fct_collapse()` function (and its internal helper functions).
 # 2025-05-03
 #   - `add fct_relevel()` fix for non-factor inputs
 # 2025-02-24
