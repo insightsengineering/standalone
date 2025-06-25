@@ -88,6 +88,8 @@ fct_relevel <- function(f, ..., after = 0L) {
   return(new_factor)
 }
 
+# internal forcats function used within `fct_collapse()`
+# to re-value factor levels
 .lvls_revalue <- function(f, new_levels) {
   if (length(new_levels) != nlevels(f)) {
     n_new <- length(new_levels)
@@ -107,6 +109,8 @@ fct_relevel <- function(f, ..., after = 0L) {
   }
 }
 
+# internal forcats function used within `fct_collapse()`
+# to rename factor levels
 .lvls_rename <- function(f, new_levels) {
   old_levels <- levels(f)
   idx <- match(new_levels, old_levels)
@@ -120,6 +124,8 @@ fct_relevel <- function(f, ..., after = 0L) {
   old_levels
 }
 
+# internal forcats function used within `fct_collapse()`
+# to process other factor levels not being collapsed
 .lvls_other <- function(f, keep, other_level = "Other") {
   if (all(keep)) {
     f
@@ -136,7 +142,10 @@ fct_collapse <- function(f, ..., other_level = NULL) {
   dots <- rlang::list2(...)
   old <- unlist(dots, use.names = FALSE) %||% character()
   new <- rep(names(dots), lengths(dots))
+
+  # collapse/re-value factor levels using new names
   out <- .lvls_revalue(f, .lvls_rename(f, rlang::set_names(old, new)))
+  # add other levels not being collapsed
   if (!is.null(other_level)) out <- .lvls_other(out, levels(out) %in% new, other_level)
 
   out
