@@ -55,6 +55,19 @@ test_that("fct_relevel() works", {
   expect_equal(levels(f_new), c("b", "a", "d", "c"))  # "d" should be added as a level, even though not observed
 })
 
+test_that("fct_collapse() works", {
+  f <- factor(c("b", "b", "a", "c", "c", "d"))
+  expect_equal(forcats::fct_collapse(f, ab = c("a", "b")), fct_collapse(f, ab = c("a", "b")))
+  expect_equal(
+    forcats::fct_collapse(f, ab = c("a", "b"), cd = c("c", "d")),
+    fct_collapse(f, ab = c("a", "b"), cd = c("c", "d"))
+  )
+  expect_equal(
+    forcats::fct_collapse(f, ab = c("a", "b"), other_level = "c"),
+    fct_collapse(f, ab = c("a", "b"), other_level = "c")
+  )
+})
+
 test_that("fct_* function behaviour when input is not a factor ", {
   f <- factor(c("b", "b", "a", "c", "c", "c"))
   c <- as.character(c("b", "b", "a", "c", "c", "c"))
@@ -62,6 +75,7 @@ test_that("fct_* function behaviour when input is not a factor ", {
   expect_equal(forcats::fct_inorder(f), fct_inorder(c))
   expect_equal(forcats::fct_rev(f), fct_rev(c))
   expect_equal(forcats::fct_relevel(forcats::fct_relevel(f, "b", "a")), fct_relevel(fct_relevel(c, "b", "a")))
+  expect_equal(forcats::fct_collapse(f, ab = c("a", "b")), fct_collapse(c, ab = c("a", "b")))
 
   f <- factor(sample(letters[1:3], 20, replace = TRUE))
   c <- as.character(f)
