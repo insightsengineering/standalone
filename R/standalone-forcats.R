@@ -81,6 +81,7 @@ fct_relevel <- function(f, ..., after = 0L) {
   } else {
     rlang::chr(...)
   }
+
   # Reorder levels
   new_levels <- append(setdiff(old_levels, first_levels), first_levels, after = after)
   new_factor <- factor(f, levels = new_levels)
