@@ -151,5 +151,17 @@ fct_collapse <- function(f, ..., other_level = NULL) {
   out
 }
 
+fct_reorder <- function(.f, .x, .fun = median, .na_rm = NULL, .desc = FALSE, ...) {
+  if (!inherits(.f, "factor")) .f <- factor(.f)
+
+  # Compute summary values (if applicable)
+  summary_vals <- tapply(.x, .f, .fun, ..., simplify = TRUE)
+
+  # Order levels
+  new_levels <- names(sort(summary_vals, decreasing = .desc))
+
+  # Return reordered factor
+  factor(.f, levels = new_levels)
+}
 # nocov end
 # styler: on
