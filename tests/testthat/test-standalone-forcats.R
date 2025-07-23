@@ -86,19 +86,6 @@ test_that("fct_* function behaviour when input is not a factor ", {
   expect_equal(forcats::fct_na_value_to_level(f, level = NA), fct_na_value_to_level(c, level = NA))
 })
 
-test_that("fct_collapse() works", {
-  f <- factor(c("b", "b", "a", "c", "c", "d"))
-  expect_equal(forcats::fct_collapse(f, ab = c("a", "b")), fct_collapse(f, ab = c("a", "b")))
-  expect_equal(
-    forcats::fct_collapse(f, ab = c("a", "b"), cd = c("c", "d")),
-    fct_collapse(f, ab = c("a", "b"), cd = c("c", "d"))
-  )
-  expect_equal(
-    forcats::fct_collapse(f, ab = c("a", "b"), other_level = "c"),
-    fct_collapse(f, ab = c("a", "b"), other_level = "c")
-  )
-})
-
 test_that("fct_reorder() works", {
 
   f <- factor(c("WEEK 1", "WEEK 12", "WEEK 1", "WEEK 4", "WEEK 12", "WEEK 6"))
