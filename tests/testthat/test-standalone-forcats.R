@@ -89,11 +89,11 @@ test_that("fct_* function behaviour when input is not a factor ", {
 test_that("fct_reorder() works", {
 
   f <- factor(c("WEEK 1", "WEEK 12", "WEEK 1", "WEEK 4", "WEEK 12", "WEEK 6"))
-  x <- c(1,12,1,4,12,6)
+  x <- c(1, 12, 1, 4, 12, 6)
 
   expect_equal(forcats::fct_reorder(f, x), fct_reorder(f, x))
   # levels before fct_reorder are alphabetical (week 12 before week 4)
-  expect_equal(levels(f),  c("WEEK 1",  "WEEK 12",  "WEEK 4",  "WEEK 6"))
+  expect_equal(levels(f), c("WEEK 1",  "WEEK 12",  "WEEK 4",  "WEEK 6"))
   #levels are ordered by x with fct_reorder
   expect_equal(levels(fct_reorder(f,x)), c("WEEK 1",  "WEEK 4",  "WEEK 6",  "WEEK 12"))
   expect_equal(levels(fct_reorder(f,x, .desc = TRUE)), c("WEEK 12",  "WEEK 6",  "WEEK 4",  "WEEK 1"))
