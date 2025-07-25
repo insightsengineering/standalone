@@ -1,7 +1,7 @@
 # ---
 # repo: insightsengineering/standalone
 # file: standalone-forcats.R
-# last-updated: 2025-06-24
+# last-updated: 2025-07-25
 # license: https://unlicense.org
 # imports:
 # ---
@@ -11,6 +11,8 @@
 # of programming.
 #
 # ## Changelog
+# 2025-07-25
+#   - add `fct_reorder()` function.
 # 2025-06-24
 #   - add `fct_collapse()` function (and its internal helper functions).
 # 2025-05-03
