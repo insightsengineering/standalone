@@ -47,12 +47,12 @@ test_that("fct_relevel() works", {
   expect_equal(forcats::fct_relevel(fct_relevel(f, "b", "a")), fct_relevel(f, "b", "a"))
   expect_equal(forcats::fct_relevel(f, "a", after = Inf), fct_relevel(f, "a", after = Inf))
   expect_equal(forcats::fct_relevel(f, rev), fct_relevel(f, rev))
-  expect_equal(forcats::fct_relevel(f, ~rev(.x)), fct_relevel(f, ~rev(.x)))
+  expect_equal(forcats::fct_relevel(f, ~ rev(.x)), fct_relevel(f, ~ rev(.x)))
   expect_equal(forcats::fct_relevel(letters, "z"), fct_relevel(letters, "z"))
 
   # test for unobserved levels
-  f_new <- fct_relevel(f, "b", "a", "d")  # "d" is unobserved
-  expect_equal(levels(f_new), c("b", "a", "d", "c"))  # "d" should be added as a level, even though not observed
+  f_new <- fct_relevel(f, "b", "a", "d") # "d" is unobserved
+  expect_equal(levels(f_new), c("b", "a", "d", "c")) # "d" should be added as a level, even though not observed
 })
 
 test_that("fct_collapse() works", {
@@ -87,16 +87,15 @@ test_that("fct_* function behaviour when input is not a factor ", {
 })
 
 test_that("fct_reorder() works", {
-
   f <- factor(c("WEEK 1", "WEEK 12", "WEEK 1", "WEEK 4", "WEEK 12", "WEEK 6"))
   x <- c(1, 12, 1, 4, 12, 6)
 
   expect_equal(forcats::fct_reorder(f, x), fct_reorder(f, x))
   # levels before fct_reorder are alphabetical (week 12 before week 4)
-  expect_equal(levels(f), c("WEEK 1",  "WEEK 12",  "WEEK 4",  "WEEK 6"))
-  #levels are ordered by x with fct_reorder
-  expect_equal(levels(fct_reorder(f,x)), c("WEEK 1",  "WEEK 4",  "WEEK 6",  "WEEK 12"))
-  expect_equal(levels(fct_reorder(f,x, .desc = TRUE)), c("WEEK 12",  "WEEK 6",  "WEEK 4",  "WEEK 1"))
+  expect_equal(levels(f), c("WEEK 1", "WEEK 12", "WEEK 4", "WEEK 6"))
+  # levels are ordered by x with fct_reorder
+  expect_equal(levels(fct_reorder(f, x)), c("WEEK 1", "WEEK 4", "WEEK 6", "WEEK 12"))
+  expect_equal(levels(fct_reorder(f, x, .desc = TRUE)), c("WEEK 12", "WEEK 6", "WEEK 4", "WEEK 1"))
 
 
   # Test NA handling
@@ -105,4 +104,4 @@ test_that("fct_reorder() works", {
 
   # function handled NA as forcats does
   expect_equal(levels(forcats::fct_reorder(f1, x, .na_rm = FALSE)), levels(fct_reorder(f1, x, .na_rm = FALSE)))
-  })
+})

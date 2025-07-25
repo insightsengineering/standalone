@@ -151,19 +151,21 @@ fct_collapse <- function(f, ..., other_level = NULL) {
   out
 }
 
-fct_reorder <- function(.f, .x, .fun = median, .na_rm = TRUE, .desc = FALSE, ...) {
+fct_reorder <- function(.f, .x, .fun = median, ..., .na_rm = NULL, .default = Inf, .desc = FALSE) {
   if (!inherits(.f, "factor")) .f <- factor(.f)
+  stopifnot(length(.f) == length(.x))
+  .fun <- as.function(.fun)
 
   lvls <- levels(.f)
 
   # Compute summary statistic per level
   summary_vals <- vapply(lvls, function(lvl) {
     vals <- .x[.f == lvl]
-    if (.na_rm) {
+    if (isTRUE(.na_rm)) {
       vals <- vals[!is.na(vals)]
     }
     if (length(vals) == 0) {
-      return(NA_real_)  # force NA for empty groups
+      return(.default)
     }
     .fun(vals, ...)
   }, numeric(1))
