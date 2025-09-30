@@ -21,7 +21,7 @@
 #' @param env (`enviroment`)\cr
 #'   call environment used as the `call` parameter in [cli::cli_abort()] for package checks
 #'
-#' @seealso [get_cli_abort_call()]
+#' @seealso `get_cli_abort_call()`
 #'
 #' @keywords internal
 #' @noRd
@@ -37,7 +37,7 @@ set_cli_abort_call <- function(env = rlang::caller_env()) {
 #' Get Call Environment for [cli::cli_abort()]
 #'
 #' @inheritParams set_cli_abort_call
-#' @seealso [set_cli_abort_call()]
+#' @seealso `set_cli_abort_call()`
 #'
 #' @keywords internal
 #' @noRd
