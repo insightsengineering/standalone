@@ -33,6 +33,9 @@
 #'
 #' - `get_min_version_required()` will return, if any, the minimum version of `pkg` required by `ref`.
 #'
+#' - `skip_if_not_pkg_installed()` checks whether packages are installed and skips tests if any are
+#'   not installed.
+#'
 #' @param pkg (`character`)\cr
 #'   vector of package names to check.
 #' @param call (`environment`)\cr
@@ -171,6 +174,16 @@ get_min_version_required <- function(pkg, ref = utils::packageName(), lib.loc = 
     dplyr::filter(str_detect(.data$pkg, paste0(paste0(.env$pkg, "(\\s|$)"), collapse = "|")))
 
   res
+}
+
+skip_if_not_pkg_installed <- function(pkg,
+                                      ref = utils::packageName()) {
+  if (!is_pkg_installed(pkg, ref)) {
+    # skip if any required package is not installed
+    skip(message = "Not all required packages are installed")
+  } else {
+    invisible()
+  }
 }
 
 # nocov end

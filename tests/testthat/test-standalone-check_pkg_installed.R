@@ -69,3 +69,10 @@ test_that("check_pkg_installed() works", {
     0L
   )
 })
+
+test_that("skip_if_not_pkg_installed() works", {
+  skip_if_not_pkg_installed("dplyr")
+  expect_true(TRUE)
+
+  skip_if_not_pkg_installed("br000000m")
+})
