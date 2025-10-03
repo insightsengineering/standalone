@@ -12,30 +12,18 @@ test_that("check_pkg_installed() works", {
   expect_false(is_pkg_installed(c("dpl-eye-r", "tidyr")))
 
   expect_equal(
-    get_min_version_required("tidyselect", "dplyr") |>
-      dplyr::select(dependency_type, pkg, version, compare),
+    get_min_version_required("tidyselect", "dplyr"),
     dplyr::tibble(
-      dependency_type = "Imports",
-      pkg = "tidyselect",
-      version = "1.2.0",
-      compare = ">="
+      pkg = "tidyselect (>= 1.2.0)"
     )
   )
   expect_equal(
     get_min_version_required("brms", ref = NULL),
-    dplyr::tibble(
-      reference_pkg = NA_character_, reference_pkg_version = NA_character_,
-      dependency_type = NA_character_, pkg = "brms", version = NA_character_,
-      compare = NA_character_
-    )
+    dplyr::tibble(pkg = "brms")
   )
   expect_equal(
     get_min_version_required("dplyr", ref = NULL),
-    dplyr::tibble(
-      reference_pkg = NA_character_, reference_pkg_version = NA_character_,
-      dependency_type = NA_character_, pkg = "dplyr", version = NA_character_,
-      compare = NA_character_
-    )
+    dplyr::tibble(pkg = "dplyr")
   )
 
   expect_error(
@@ -49,7 +37,7 @@ test_that("check_pkg_installed() works", {
 
   expect_equal(
     names(df_deps),
-    c("reference_pkg", "reference_pkg_version", "dependency_type", "pkg", "version", "compare")
+    "pkg"
   )
 
   skip_if(interactive())
