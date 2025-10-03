@@ -1,7 +1,7 @@
 # ---
 # repo: insightsengineering/standalone
 # file: standalone-check_pkg_installed.R
-# last-updated: 2025-02-03
+# last-updated: 2025-10-03
 # license: https://unlicense.org
 # dependencies: standalone-cli_call_env.R
 # imports: [rlang, dplyr, tidyr]
@@ -12,6 +12,9 @@
 # ## Changelog
 # 2025-02-03
 #   - `get_pkg_dependencies()` was updated to use base r equivalents for `str_extract()` and `str_remove_all()`.
+#
+# 2025-10-03
+#   - `skip_if_not_pkg_installed()` was added.
 
 # nocov start
 # styler: off
@@ -136,8 +139,8 @@ get_pkg_dependencies <- function(pkg = utils::packageName(), lib.loc = NULL) {
     dplyr::select(
       dplyr::any_of(c("Imports", "Depends", "Suggests", "Enhances", "LinkingTo"))
     ) |>
-    tidyr::pivot_longer(cols = everything(), names_to = NULL, values_to = "pkg") |>
-    tidyr::separate_longer_delim(everything(), delim = ",") |>
+    tidyr::pivot_longer(cols = dplyr::everything(), names_to = NULL, values_to = "pkg") |>
+    tidyr::separate_longer_delim(dplyr::everything(), delim = ",") |>
     dplyr::mutate(
       pkg = trimws(
         x = gsub(x = .data$pkg, pattern = "\\s+", replacement = " "),
@@ -171,7 +174,8 @@ get_min_version_required <- function(pkg, ref = utils::packageName(), lib.loc = 
   # that may not be proper deps of the reference package (these pkgs don't have min versions)
   res <-
     get_pkg_dependencies(ref, lib.loc = lib.loc) |>
-    dplyr::filter(str_detect(.data$pkg, paste0(paste0(.env$pkg, "(\\s|$)"), collapse = "|")))
+    dplyr::filter(str_detect(.data$pkg, paste0(paste0(.env$pkg, "(\\s|$)"), collapse = "|"))) |>
+    dplyr::full_join(dplyr::tibble(pkg = pkg), by = "pkg")
 
   res
 }
@@ -180,7 +184,7 @@ skip_if_not_pkg_installed <- function(pkg,
                                       ref = utils::packageName()) {
   if (!is_pkg_installed(pkg, ref)) {
     # skip if any required package is not installed
-    skip(message = "Not all required packages are installed")
+    testthat::skip(message = "Not all required packages are installed")
   } else {
     invisible()
   }

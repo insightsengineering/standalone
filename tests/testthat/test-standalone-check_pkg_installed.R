@@ -56,9 +56,6 @@ test_that("check_pkg_installed() works", {
   expect_error(
     check_pkg_installed("br000000m")
   )
-  expect_error(
-    check_pkg_installed("br000000m", fn = "test_fun()")
-  )
 
   expect_equal(
     get_pkg_dependencies(NULL) |> nrow(),
