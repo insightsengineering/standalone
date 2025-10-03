@@ -170,14 +170,14 @@ get_min_version_required <- function(pkg, ref = utils::packageName(), lib.loc = 
     )
   }
 
-  # get the package_ref deps and subset on requested pkgs, also supplement df with pkgs
-  # that may not be proper deps of the reference package (these pkgs don't have min versions)
-  res <-
-    get_pkg_dependencies(ref, lib.loc = lib.loc) |>
-    dplyr::filter(str_detect(.data$pkg, paste0(paste0(.env$pkg, "(\\s|$)"), collapse = "|"))) |>
-    dplyr::full_join(dplyr::tibble(pkg = pkg), by = "pkg")
+  # get the package_ref deps and subset on requested pkgs
+  res <- get_pkg_dependencies(ref, lib.loc = lib.loc) |>
+    dplyr::filter(str_detect(.data$pkg, paste0(paste0(.env$pkg, "(\\s|$)"), collapse = "|")))
 
-  res
+  # supplement df with pkgs that may not be proper deps of the reference package (these pkgs don't have min versions)
+  pkg_add <- which(sapply(pkg, \(x) !grepl(x, paste0(res$pkg, collapse = "|")))) |> names()
+  res |>
+    dplyr::full_join(dplyr::tibble(pkg = pkg_add), by = "pkg")
 }
 
 skip_if_not_pkg_installed <- function(pkg,
