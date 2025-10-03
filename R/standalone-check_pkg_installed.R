@@ -1,7 +1,7 @@
 # ---
 # repo: insightsengineering/standalone
 # file: standalone-check_pkg_installed.R
-# last-updated: 2025-02-03
+# last-updated: 2025-10-03
 # license: https://unlicense.org
 # dependencies: standalone-cli_call_env.R
 # imports: [rlang, dplyr, tidyr]
@@ -12,6 +12,9 @@
 # ## Changelog
 # 2025-02-03
 #   - `get_pkg_dependencies()` was updated to use base r equivalents for `str_extract()` and `str_remove_all()`.
+#
+# 2025-10-03
+#   - `skip_if_not_pkg_installed()` was added.
 
 # nocov start
 # styler: off
@@ -32,6 +35,9 @@
 #'   dependencies of a specific package.
 #'
 #' - `get_min_version_required()` will return, if any, the minimum version of `pkg` required by `ref`.
+#'
+#' - `skip_if_not_pkg_installed()` checks whether packages are installed and skips tests if any are
+#'   not installed.
 #'
 #' @param pkg (`character`)\cr
 #'   vector of package names to check.
@@ -78,18 +84,13 @@ check_pkg_installed <- function(pkg,
   if (!is.character(ref) && !is.null(ref)) cli::cli_abort("{.arg ref} must be a string.")
 
   # get min version data -------------------------------------------------------
-  df_pkg_min_version <-
-    get_min_version_required(pkg = pkg, ref = ref)
+  df_pkg_min_version <- get_min_version_required(pkg = pkg, ref = ref)
 
   # prompt user to install package ---------------------------------------------
   rlang::check_installed(
     pkg = df_pkg_min_version$pkg,
-    version = df_pkg_min_version$version,
-    compare = df_pkg_min_version$compare,
     call = call
-  ) |>
-    # this can be removed after this issue is resolved https://github.com/r-lib/rlang/issues/1694
-    suppressWarnings()
+  )
 }
 
 #' @inheritParams check_pkg_installed
@@ -103,14 +104,15 @@ is_pkg_installed <- function(pkg,
   df_pkg_min_version <-
     get_min_version_required(pkg = pkg, ref = ref)
 
+
   # check installation TRUE/FALSE ----------------------------------------------
+  # any package is not installed
+  if (length(df_pkg_min_version$pkg) < length(pkg)) return(FALSE)
+
+  # all packages are installed - check for correct versions
   rlang::is_installed(
-    pkg = df_pkg_min_version$pkg,
-    version = df_pkg_min_version$version,
-    compare = df_pkg_min_version$compare
-  ) |>
-    # this can be removed after this issue is resolved https://github.com/r-lib/rlang/issues/1694
-    suppressWarnings()
+    pkg = df_pkg_min_version$pkg
+  )
 }
 
 #' @inheritParams check_pkg_installed
@@ -135,47 +137,20 @@ get_pkg_dependencies <- function(pkg = utils::packageName(), lib.loc = NULL) {
     unclass() |>
     dplyr::as_tibble() |>
     dplyr::select(
-      dplyr::any_of(c(
-        "Package", "Version", "Imports", "Depends",
-        "Suggests", "Enhances", "LinkingTo"
-      ))
+      dplyr::any_of(c("Imports", "Depends", "Suggests", "Enhances", "LinkingTo"))
     ) |>
-    dplyr::rename(
-      reference_pkg = "Package",
-      reference_pkg_version = "Version"
-    ) |>
-    tidyr::pivot_longer(
-      -dplyr::all_of(c("reference_pkg", "reference_pkg_version")),
-      values_to = "pkg",
-      names_to = "dependency_type",
-    ) |>
-    tidyr::separate_rows("pkg", sep = ",") |>
+    tidyr::pivot_longer(cols = dplyr::everything(), names_to = NULL, values_to = "pkg") |>
+    tidyr::separate_longer_delim(dplyr::everything(), delim = ",") |>
     dplyr::mutate(
       pkg = trimws(
         x = gsub(x = .data$pkg, pattern = "\\s+", replacement = " "),
         which = "both", whitespace = "[ \t\r\n]"
       )
-    ) |>
-    dplyr::filter(!is.na(.data$pkg)) |>
-    tidyr::separate(
-      .data$pkg,
-      into = c("pkg", "version"),
-      sep = " ", extra = "merge", fill = "right"
-    ) |>
-    dplyr::mutate(
-      compare = as.character(ifelse(regexpr("[>=<]+", .data$version) > 0,
-                       regmatches(.data$version, regexpr("[>=<]+", .data$version)),
-                       NA)),
-      version = gsub(pattern = "[\\(\\) >=<]", replacement = "", x = .data$version)
     )
 }
 
 .empty_pkg_deps_df <- function() {
-  dplyr::tibble(
-    reference_pkg = character(0L), reference_pkg_version = character(0L),
-    dependency_type = character(0L), pkg = character(0L),
-    version = character(0L), compare = character(0L)
-  )
+  dplyr::tibble(pkg = character(0L))
 }
 
 #' @inheritParams check_pkg_installed
@@ -195,17 +170,24 @@ get_min_version_required <- function(pkg, ref = utils::packageName(), lib.loc = 
     )
   }
 
-  # get the package_ref deps and subset on requested pkgs, also supplement df with pkgs
-  # that may not be proper deps of the reference package (these pkgs don't have min versions)
-  res <-
-    get_pkg_dependencies(ref, lib.loc = lib.loc) |>
-    dplyr::filter(.data$pkg %in% .env$pkg) |>
-    dplyr::full_join(
-      dplyr::tibble(pkg = pkg),
-      by = "pkg"
-    )
+  # get the package_ref deps and subset on requested pkgs
+  res <- get_pkg_dependencies(ref, lib.loc = lib.loc) |>
+    dplyr::filter(str_detect(.data$pkg, paste0(paste0(.env$pkg, "(\\s|$)"), collapse = "|")))
 
-  res
+  # supplement df with pkgs that may not be proper deps of the reference package (these pkgs don't have min versions)
+  pkg_add <- which(sapply(pkg, \(x) !grepl(x, paste0(res$pkg, collapse = "|")))) |> names()
+  res |>
+    dplyr::full_join(dplyr::tibble(pkg = pkg_add), by = "pkg")
+}
+
+skip_if_not_pkg_installed <- function(pkg,
+                                      ref = utils::packageName()) {
+  if (!is_pkg_installed(pkg, ref)) {
+    # skip if any required package is not installed
+    testthat::skip(message = "Not all required packages are installed")
+  } else {
+    invisible()
+  }
 }
 
 # nocov end
