@@ -106,10 +106,6 @@ is_pkg_installed <- function(pkg,
 
 
   # check installation TRUE/FALSE ----------------------------------------------
-  # any package is not installed
-  if (length(df_pkg_min_version$pkg) < length(pkg)) return(FALSE)
-
-  # all packages are installed - check for correct versions
   rlang::is_installed(
     pkg = df_pkg_min_version$pkg
   )
