@@ -185,9 +185,8 @@ skip_if_pkg_not_installed <- function(pkg,
     testthat::skip(message = paste(
       "Required package", shQuote(names(which(!pkg_installed))[1], type = "sh"), "is not installed"
     ))
-  } else {
-    invisible()
   }
+  invisible()
 }
 
 # nocov end
