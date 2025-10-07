@@ -182,7 +182,7 @@ skip_if_pkg_not_installed <- function(pkg,
   if (!all(pkg_installed)) {
     # skip if any required package is not installed
     testthat::skip(message = paste(
-      "Required package(s) not installed:", paste(shQuote(names(which(!pkg_installed)), type = "sh"), collapse = ", ")
+      "Required package", shQuote(names(which(!pkg_installed)), type = "sh"), "is not installed"
     ))
   } else {
     invisible()
