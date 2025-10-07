@@ -71,5 +71,5 @@ test_that("skip_if_pkg_not_installed() works", {
   skip_if_pkg_not_installed("dplyr")
   expect_true(TRUE)
 
-  skip_if_pkg_not_installed("br000000m")
+  skip_if_pkg_not_installed(c("dplyr", "br000000m", "notapkg"))
 })
