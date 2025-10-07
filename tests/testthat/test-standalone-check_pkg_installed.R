@@ -67,9 +67,9 @@ test_that("check_pkg_installed() works", {
   )
 })
 
-test_that("skip_if_not_pkg_installed() works", {
-  skip_if_not_pkg_installed("dplyr")
+test_that("skip_if_pkg_not_installed() works", {
+  skip_if_pkg_not_installed("dplyr")
   expect_true(TRUE)
 
-  skip_if_not_pkg_installed("br000000m")
+  skip_if_pkg_not_installed("br000000m")
 })

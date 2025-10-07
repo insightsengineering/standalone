@@ -14,7 +14,7 @@
 #   - `get_pkg_dependencies()` was updated to use base r equivalents for `str_extract()` and `str_remove_all()`.
 #
 # 2025-10-03
-#   - `skip_if_not_pkg_installed()` was added.
+#   - `skip_if_pkg_not_installed()` was added.
 
 # nocov start
 # styler: off
@@ -36,7 +36,7 @@
 #'
 #' - `get_min_version_required()` will return, if any, the minimum version of `pkg` required by `ref`.
 #'
-#' - `skip_if_not_pkg_installed()` checks whether packages are installed and skips tests if any are
+#' - `skip_if_pkg_not_installed()` checks whether packages are installed and skips tests if any are
 #'   not installed.
 #'
 #' @param pkg (`character`)\cr
@@ -176,7 +176,7 @@ get_min_version_required <- function(pkg, ref = utils::packageName(), lib.loc = 
     dplyr::full_join(dplyr::tibble(pkg = pkg_add), by = "pkg")
 }
 
-skip_if_not_pkg_installed <- function(pkg,
+skip_if_pkg_not_installed <- function(pkg,
                                       ref = utils::packageName()) {
   if (!is_pkg_installed(pkg, ref)) {
     # skip if any required package is not installed
