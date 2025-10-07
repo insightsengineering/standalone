@@ -168,7 +168,7 @@ get_min_version_required <- function(pkg, ref = utils::packageName(), lib.loc = 
 
   # get the package_ref deps and subset on requested pkgs
   res <- get_pkg_dependencies(ref, lib.loc = lib.loc) |>
-    dplyr::filter(str_detect(.data$pkg, paste0(paste0(.env$pkg, "(\\s|$)"), collapse = "|")))
+    dplyr::filter(grepl(paste0(paste0(.env$pkg, "(\\s|$)"), collapse = "|"), .data$pkg))
 
   # supplement df with pkgs that may not be proper deps of the reference package (these pkgs don't have min versions)
   pkg_add <- which(sapply(pkg, \(x) !grepl(x, paste0(res$pkg, collapse = "|")))) |> names()
