@@ -178,11 +178,12 @@ get_min_version_required <- function(pkg, ref = utils::packageName(), lib.loc = 
 
 skip_if_pkg_not_installed <- function(pkg,
                                       ref = utils::packageName()) {
-  pkg_installed <- sapply(pkg, is_pkg_installed, ref = ref)
+  pkg_deps <- get_min_version_required(pkg, ref = ref)
+  pkg_installed <- sapply(pkg_deps$pkg, rlang::is_installed)
   if (!all(pkg_installed)) {
     # skip if any required package is not installed
     testthat::skip(message = paste(
-      "Required package", shQuote(names(which(!pkg_installed)), type = "sh"), "is not installed"
+      "Required package", shQuote(names(which(!pkg_installed))[1], type = "sh"), "is not installed"
     ))
   } else {
     invisible()
