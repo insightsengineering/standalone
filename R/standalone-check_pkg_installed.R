@@ -36,8 +36,8 @@
 #'
 #' - `get_min_version_required()` will return, if any, the minimum version of `pkg` required by `ref`.
 #'
-#' - `skip_if_pkg_not_installed()` checks whether packages are installed and skips tests if any are
-#'   not installed.
+#' - `skip_if_pkg_not_installed()` checks whether packages are installed (with the minimum required version)
+#'    and skips tests if any are not installed.
 #'
 #' @param pkg (`character`)\cr
 #'   vector of package names to check.
