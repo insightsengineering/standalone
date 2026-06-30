@@ -105,3 +105,27 @@ test_that("fct_reorder() works", {
   # function handled NA as forcats does
   expect_equal(levels(forcats::fct_reorder(f1, x, .na_rm = FALSE)), levels(fct_reorder(f1, x, .na_rm = FALSE)))
 })
+
+test_that("fct_reorder() matches forcats with many levels and empty levels", {
+  set.seed(1)
+  f <- factor(sample(paste0("L", 1:200), 1000, replace = TRUE))
+  x <- rnorm(1000)
+  expect_equal(fct_reorder(f, x), forcats::fct_reorder(f, x))
+  expect_equal(fct_reorder(f, x, .desc = TRUE), forcats::fct_reorder(f, x, .desc = TRUE))
+
+  # a level present in `levels()` but absent from the data falls back to .default
+  f_empty <- factor(c("a", "b", "c"), levels = c("a", "b", "c", "d"))
+  x_empty <- c(3, 2, 1)
+  expect_equal(
+    levels(fct_reorder(f_empty, x_empty)),
+    levels(forcats::fct_reorder(f_empty, x_empty))
+  )
+})
+
+test_that("fct_collapse() works without base R `%||%` (R < 4.4 compatibility)", {
+  f <- factor(c("b", "b", "a", "c", "c", "d"))
+  expect_equal(
+    fct_collapse(f, ab = c("a", "b")),
+    forcats::fct_collapse(f, ab = c("a", "b"))
+  )
+})
