@@ -21,6 +21,7 @@ Suggests:
     spelling (>= 2.2.0),
     stringr,
     testthat (>= 3.2.0),
+    tibble,
     usethis
 Config/Needs/check: hms
 Config/Needs/website: rmarkdown, insightsengineering/nesttemplate
