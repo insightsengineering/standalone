@@ -272,6 +272,12 @@ test_that("check functions error on empty input when allow_empty = FALSE", {
   expect_error(check_integerish(integer(0)))
   expect_silent(check_integerish(integer(0), allow_empty = TRUE))
 
+  expect_error(check_scalar_integerish(integer(0)))
+  expect_silent(check_scalar_integerish(integer(0), allow_empty = TRUE))
+
+  expect_error(check_length(character(0), length = 1))
+  expect_silent(check_length(character(0), length = 1, allow_empty = TRUE))
+
   expect_error(check_numeric(numeric(0)))
   expect_silent(check_numeric(numeric(0), allow_empty = TRUE))
 

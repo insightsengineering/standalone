@@ -15,6 +15,8 @@
 # 2026-07-01
 #   - `check_*()` functions now error on empty input when `allow_empty = FALSE`
 #     (previously empty input silently passed class/type checks) (#30)
+#   - `check_scalar_integerish()` failures now use the `check_scalar_integerish`
+#     condition class (previously `check_integerish`) (#30)
 #
 # 2025-05-08
 #   - Added `check_identical()` and `check_identical_length()`
@@ -493,8 +495,8 @@ check_integerish <- function(x,
                              message =
                                ifelse(
                                  allow_empty,
-                                 "The {.arg {arg_name}} argument must an integer vector or empty.",
-                                 "The {.arg {arg_name}} argument must an integer vector."
+                                 "The {.arg {arg_name}} argument must be an integer vector or empty.",
+                                 "The {.arg {arg_name}} argument must be an integer vector."
                                ),
                              arg_name = rlang::caller_arg(x),
                              class = "check_integerish",
@@ -525,11 +527,11 @@ check_scalar_integerish <- function(x,
                                     message =
                                       ifelse(
                                         allow_empty,
-                                        "The {.arg {arg_name}} argument must an scalar integer or empty.",
-                                        "The {.arg {arg_name}} argument must an scalar integer."
+                                        "The {.arg {arg_name}} argument must be a scalar integer or empty.",
+                                        "The {.arg {arg_name}} argument must be a scalar integer."
                                       ),
                                     arg_name = rlang::caller_arg(x),
-                                    class = "check_integerish",
+                                    class = "check_scalar_integerish",
                                     call = get_cli_abort_call(),
                                     envir = rlang::current_env()) {
   # if empty: return invisibly when allowed, otherwise error
