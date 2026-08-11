@@ -2,7 +2,7 @@ pandoc: '3.9'
 pkgdown: 2.2.1
 pkgdown_sha: ~
 articles: {}
-last_built: 2026-08-10T16:12Z
+last_built: 2026-08-11T07:31Z
 urls:
   reference: https://insightsengineering.github.io/standalone/main/reference
   article: https://insightsengineering.github.io/standalone/main/articles
